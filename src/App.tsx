@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -8,6 +8,13 @@ function App() {
     enabled: false,
     task: ''
   })
+
+  useEffect(() => {
+    const tarefasSalvas = localStorage.getItem("@cursoreact")
+    if(tarefasSalvas){
+      setTasks(JSON.parse(tarefasSalvas));
+    }
+  },[])
 
   function handleRegister() {
     if (!input){
@@ -22,6 +29,7 @@ function App() {
 
     setTasks(tarefas => [...tarefas, input]);
     setInput("");
+    localStorage.setItem("@cursoreact", JSON.stringify([...tasks, input]));
   }
 
   function handleSaveEdit () {
@@ -34,12 +42,14 @@ function App() {
       task: ''
     })
     setInput('');
+    localStorage.setItem("@cursoreact", JSON.stringify(allTasks))
   }
 
   function handleDelete(item: string) {
     const removeTask = tasks.filter(task => task !== item);
     console.log(removeTask)
     setTasks(removeTask);
+    localStorage.setItem("@cursoreact", JSON.stringify(removeTask))
   }
 
   function handleEdit(item: string) {
