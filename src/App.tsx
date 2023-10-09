@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import './App.css'
 
 function App() {
@@ -68,6 +68,9 @@ function App() {
     })
   }
 
+  const totalTarefas = useMemo(() => {
+    return tasks.length
+  }, [tasks])
   return (
 
       <div>
@@ -81,8 +84,9 @@ function App() {
           <button onClick={handleRegister}>
             {editTask.enabled ? "Atualizar tarefa" : "Adicionar tarefa"}
           </button>
-          
           <hr />
+          <strong>Você tem {totalTarefas} tarefas</strong>
+          <br/><br/>
           {tasks.map((item, index) => 
           <section key={item}>
             <span>{item}</span>
