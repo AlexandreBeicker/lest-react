@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import './App.css'
 
 function App() {
@@ -26,20 +26,22 @@ function App() {
     localStorage.setItem("@cursoreact", JSON.stringify(tasks))
   },[tasks]);
 
-  function handleRegister() {
-    if (!input){
-      alert("Preencha o campo!");
-      return
-    }
+  const handleRegister = useCallback(() => {
+      if (!input){
+        alert("Preencha o campo!");
+        return
+      }
+  
+      if(editTask.enabled){
+        handleSaveEdit();
+        return;
+      }
+  
+      setTasks(tarefas => [...tarefas, input]);
+      setInput("");
+    
+  }, [input, tasks])
 
-    if(editTask.enabled){
-      handleSaveEdit();
-      return;
-    }
-
-    setTasks(tarefas => [...tarefas, input]);
-    setInput("");
-  }
 
   function handleSaveEdit () {
     const findIndexTask = tasks.findIndex(task => task === editTask.task);
